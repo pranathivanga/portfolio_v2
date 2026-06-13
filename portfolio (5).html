@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Pranathi Vanga — Backend Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;cursor:none!important;}
+:root{
+  --bg:#0A0A0F;
+  --bg2:#0F0F18;
+  --bg3:#141420;
+  --surface:#1A1A2E;
+  --border:#ffffff12;
+  --border2:#ffffff20;
+  --accent:#7B5EA7;
+  --accent2:#A78BFA;
+  --accent3:#C4B5FD;
+  --green:#34D399;
+  --amber:#FBBF24;
+  --red:#F87171;
+  --blue:#60A5FA;
+  --text:#F1F0FF;
+  --muted:#8B8BAD;
+  --muted2:#5A5A7A;
+}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Space Grotesk',sans-serif;
+  line-height:1.7;
+  overflow-x:hidden;
+}
+
+/* NOISE TEXTURE */
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none;
+  z-index:0;
+  opacity:.4;
+}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;
+  z-index:100;
+  padding:1.2rem 4rem;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);
+  background:rgba(10,10,15,0.85);
+  backdrop-filter:blur(20px);
+}
+.nav-logo{
+  font-family:'Space Mono',monospace;
+  font-size:.95rem;
+  color:var(--accent2);
+  letter-spacing:.05em;
+}
+.nav-logo span{color:var(--muted);}
+.nav-links{display:flex;gap:2.5rem;}
+.nav-links a{
+  font-size:.85rem;
+  color:var(--muted);
+  text-decoration:none;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  transition:color .2s;
+}
+.nav-links a:hover{color:var(--accent3);}
+.nav-cta{
+  font-size:.8rem;
+  font-family:'Space Mono',monospace;
+  padding:.5rem 1.2rem;
+  border:1px solid var(--accent);
+  color:var(--accent2);
+  text-decoration:none;
+  border-radius:4px;
+  transition:all .2s;
+}
+.nav-cta:hover{background:var(--accent);color:#fff;}
+
+/* HERO */
+#hero{
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  padding:8rem 4rem 4rem;
+  position:relative;
+  overflow:hidden;
+}
+.hero-grid-bg{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(123,94,167,.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(123,94,167,.06) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black,transparent);
+}
+.hero-orb{
+  position:absolute;
+  width:600px;height:600px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(123,94,167,.15) 0%,transparent 70%);
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+}
+.hero-inner{
+  position:relative;
+  max-width:900px;
+  width:100%;
+}
+.hero-eyebrow{
+  font-family:'Space Mono',monospace;
+  font-size:.8rem;
+  color:var(--green);
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  margin-bottom:1.5rem;
+  display:flex;align-items:center;gap:.75rem;
+}
+.hero-eyebrow::before{
+  content:'';
+  display:inline-block;
+  width:32px;height:1px;
+  background:var(--green);
+}
+.hero-name{
+  font-size:clamp(3.5rem,8vw,7rem);
+  font-weight:700;
+  line-height:1.0;
+  letter-spacing:-.03em;
+  margin-bottom:1rem;
+}
+.hero-name .line2{
+  color:transparent;
+  -webkit-text-stroke:1px var(--muted2);
+}
+.hero-title{
+  font-size:clamp(1rem,2vw,1.3rem);
+  color:var(--muted);
+  font-weight:400;
+  margin-bottom:2.5rem;
+  max-width:560px;
+}
+.hero-title strong{color:var(--accent3);font-weight:500;}
+.hero-actions{display:flex;gap:1rem;flex-wrap:wrap;}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:.5rem;
+  padding:.85rem 2rem;
+  background:var(--accent);
+  color:#fff;
+  text-decoration:none;
+  border-radius:6px;
+  font-weight:500;
+  font-size:.9rem;
+  transition:all .25s;
+}
+.btn-primary:hover{background:#9D77C8;transform:translateY(-2px);}
+.btn-secondary{
+  display:inline-flex;align-items:center;gap:.5rem;
+  padding:.85rem 2rem;
+  border:1px solid var(--border2);
+  color:var(--muted);
+  text-decoration:none;
+  border-radius:6px;
+  font-weight:500;
+  font-size:.9rem;
+  transition:all .25s;
+}
+.btn-secondary:hover{border-color:var(--accent2);color:var(--accent2);transform:translateY(-2px);}
+.hero-stats{
+  display:flex;gap:3rem;
+  margin-top:4rem;
+  padding-top:2rem;
+  border-top:1px solid var(--border);
+}
+.stat-num{
+  font-size:2rem;font-weight:700;
+  color:var(--accent2);
+  font-family:'Space Mono',monospace;
+}
+.stat-label{font-size:.8rem;color:var(--muted);margin-top:.15rem;}
+
+/* FLOATING CODE CARD */
+.hero-code{
+  position:absolute;
+  right:-2rem;top:50%;
+  transform:translateY(-50%);
+  width:360px;
+  background:var(--surface);
+  border:1px solid var(--border2);
+  border-radius:12px;
+  overflow:hidden;
+  font-family:'Space Mono',monospace;
+  font-size:.75rem;
+  line-height:1.8;
+  box-shadow:0 40px 80px rgba(0,0,0,.5);
+  display:none;
+}
+.code-header{
+  background:var(--bg3);
+  padding:.6rem 1rem;
+  display:flex;align-items:center;gap:.5rem;
+  border-bottom:1px solid var(--border);
+}
+.dot{width:10px;height:10px;border-radius:50%;}
+.dot.r{background:#F87171;}
+.dot.y{background:#FBBF24;}
+.dot.g{background:#34D399;}
+.code-filename{color:var(--muted);font-size:.7rem;margin-left:.5rem;}
+.code-body{padding:1.2rem 1.4rem;}
+.c-purple{color:#C4B5FD;}
+.c-blue{color:#93C5FD;}
+.c-green{color:#6EE7B7;}
+.c-amber{color:#FCD34D;}
+.c-red{color:#FCA5A5;}
+.c-muted{color:#6B7280;}
+
+/* SECTIONS */
+section{
+  padding:6rem 4rem;
+  max-width:1100px;
+  margin:0 auto;
+  position:relative;
+}
+.section-label{
+  font-family:'Space Mono',monospace;
+  font-size:.75rem;
+  color:var(--accent2);
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  margin-bottom:1rem;
+}
+.section-title{
+  font-size:clamp(2rem,4vw,3rem);
+  font-weight:700;
+  letter-spacing:-.025em;
+  margin-bottom:.75rem;
+}
+.section-sub{
+  color:var(--muted);
+  font-size:1rem;
+  max-width:500px;
+  margin-bottom:3.5rem;
+}
+
+/* SKILLS */
+.skills-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:1.5rem;
+}
+.skill-card{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:1.75rem;
+  transition:all .3s;
+  cursor:default;
+}
+.skill-card:hover{
+  border-color:var(--accent);
+  transform:translateY(-4px);
+  box-shadow:0 20px 40px rgba(123,94,167,.12);
+}
+.skill-icon{
+  font-size:1.75rem;
+  margin-bottom:1rem;
+}
+.skill-name{
+  font-weight:600;
+  font-size:1rem;
+  margin-bottom:.75rem;
+  color:var(--text);
+}
+.skill-tags{display:flex;flex-wrap:wrap;gap:.4rem;}
+.tag{
+  font-size:.72rem;
+  font-family:'Space Mono',monospace;
+  padding:.2rem .6rem;
+  border-radius:3px;
+  background:var(--surface);
+  color:var(--muted);
+  border:1px solid var(--border);
+}
+.tag.hot{background:rgba(123,94,167,.15);color:var(--accent3);border-color:rgba(123,94,167,.3);}
+
+/* PROJECTS */
+.projects-list{display:flex;flex-direction:column;gap:1px;border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.project-item{
+  background:var(--bg2);
+  padding:2rem 2.5rem;
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:1.5rem;
+  align-items:start;
+  transition:background .2s;
+  cursor:default;
+}
+.project-item:hover{background:var(--bg3);}
+.project-item + .project-item{border-top:1px solid var(--border);}
+.project-status{
+  display:inline-flex;align-items:center;gap:.4rem;
+  font-size:.7rem;
+  font-family:'Space Mono',monospace;
+  padding:.25rem .7rem;
+  border-radius:100px;
+  margin-bottom:.75rem;
+}
+.status-live{background:rgba(52,211,153,.1);color:var(--green);border:1px solid rgba(52,211,153,.2);}
+.status-wip{background:rgba(251,191,36,.1);color:var(--amber);border:1px solid rgba(251,191,36,.2);}
+.status-dot{width:6px;height:6px;border-radius:50%;background:currentColor;}
+.project-name{font-size:1.3rem;font-weight:600;margin-bottom:.5rem;letter-spacing:-.02em;}
+.project-desc{color:var(--muted);font-size:.9rem;line-height:1.6;max-width:560px;}
+.project-meta{margin-top:1rem;display:flex;gap:.5rem;flex-wrap:wrap;}
+.project-highlight{
+  display:flex;flex-direction:column;gap:.75rem;
+  min-width:180px;
+}
+.highlight-stat{
+  text-align:right;
+}
+.highlight-num{
+  font-family:'Space Mono',monospace;
+  font-size:1.5rem;
+  font-weight:700;
+  color:var(--accent2);
+}
+.highlight-label{font-size:.75rem;color:var(--muted);}
+.project-links{display:flex;gap:.75rem;margin-top:1.5rem;}
+.proj-link{
+  font-size:.8rem;
+  font-family:'Space Mono',monospace;
+  color:var(--muted);
+  text-decoration:none;
+  display:flex;align-items:center;gap:.35rem;
+  transition:color .2s;
+}
+.proj-link:hover{color:var(--accent2);}
+.arrow{font-size:.9rem;}
+
+/* EXPERIENCE TIMELINE */
+.timeline{position:relative;padding-left:2rem;}
+.timeline::before{
+  content:'';
+  position:absolute;left:0;top:0;bottom:0;
+  width:1px;background:var(--border);
+}
+.tl-item{
+  position:relative;
+  padding-left:2rem;
+  padding-bottom:2.5rem;
+}
+.tl-dot{
+  position:absolute;
+  left:-2.4rem;top:.3rem;
+  width:10px;height:10px;
+  border-radius:50%;
+  background:var(--accent);
+  border:2px solid var(--bg);
+  box-shadow:0 0 0 3px rgba(123,94,167,.3);
+}
+.tl-date{
+  font-family:'Space Mono',monospace;
+  font-size:.75rem;color:var(--muted);
+  margin-bottom:.4rem;
+}
+.tl-role{font-size:1.1rem;font-weight:600;margin-bottom:.2rem;}
+.tl-org{font-size:.9rem;color:var(--accent3);margin-bottom:.75rem;}
+.tl-points{list-style:none;display:flex;flex-direction:column;gap:.4rem;}
+.tl-points li{
+  font-size:.9rem;color:var(--muted);
+  padding-left:1.1rem;position:relative;
+}
+.tl-points li::before{
+  content:'→';position:absolute;left:0;
+  color:var(--accent);font-size:.8rem;
+}
+
+/* CERTS */
+.certs-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:1rem;
+}
+.cert-card{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:1.25rem 1.5rem;
+  transition:all .25s;
+}
+.cert-card:hover{border-color:var(--accent2);transform:translateY(-2px);}
+.cert-issuer{font-size:.7rem;font-family:'Space Mono',monospace;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.4rem;}
+.cert-name{font-size:.9rem;font-weight:500;color:var(--text);line-height:1.4;}
+.cert-date{font-size:.75rem;color:var(--muted2);margin-top:.4rem;}
+
+/* CONTACT */
+#contact{
+  padding:6rem 4rem;
+  max-width:1100px;
+  margin:0 auto;
+}
+.contact-inner{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:4rem;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:4rem;
+  align-items:center;
+}
+.contact-big{
+  font-size:clamp(2rem,4vw,3.5rem);
+  font-weight:700;
+  letter-spacing:-.03em;
+  line-height:1.1;
+}
+.contact-big span{color:var(--accent2);}
+.contact-links{display:flex;flex-direction:column;gap:1rem;margin-top:2rem;}
+.contact-link{
+  display:flex;align-items:center;gap:1rem;
+  padding:1rem 1.25rem;
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:8px;
+  text-decoration:none;
+  color:var(--text);
+  transition:all .25s;
+}
+.contact-link:hover{border-color:var(--accent);transform:translateX(4px);}
+.contact-link-icon{font-size:1.1rem;}
+.contact-link-text{flex:1;}
+.contact-link-label{font-size:.75rem;color:var(--muted);margin-bottom:.1rem;}
+.contact-link-val{font-size:.9rem;font-weight:500;}
+.contact-link-arrow{color:var(--muted);}
+
+/* FOOTER */
+footer{
+  border-top:1px solid var(--border);
+  padding:2rem 4rem;
+  display:flex;justify-content:space-between;align-items:center;
+  color:var(--muted2);
+  font-size:.8rem;
+  font-family:'Space Mono',monospace;
+}
+
+/* SCROLL REVEAL */
+.reveal{
+  opacity:0;
+  transform:translateY(24px);
+  transition:opacity .6s ease, transform .6s ease;
+}
+.reveal.visible{opacity:1;transform:none;}
+
+/* CURSOR GLOW */
+#cur-ring{position:fixed;width:28px;height:28px;border:1.5px solid rgba(167,139,250,.8);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .12s,height .12s,background .12s,border-color .12s;mix-blend-mode:screen;will-change:left,top;}
+#cur-dot{position:fixed;width:4px;height:4px;background:#A78BFA;border-radius:50%;pointer-events:none;z-index:10000;transform:translate(-50%,-50%);box-shadow:0 0 7px #A78BFA;will-change:left,top;}
+body.cur-hover #cur-ring{width:46px;height:46px;border-color:#A78BFA;background:rgba(124,58,237,.07);}
+body.cur-hover #cur-dot{opacity:0;}
+body.cur-click #cur-ring{width:18px;height:18px;background:rgba(124,58,237,.25);}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  nav{padding:1rem 1.5rem;}
+  .nav-links{display:none;}
+  #hero{padding:7rem 1.5rem 3rem;}
+  section{padding:4rem 1.5rem;}
+  .hero-stats{gap:2rem;}
+  .hero-code{display:none!important;}
+  .project-item{grid-template-columns:1fr;}
+  .contact-inner{grid-template-columns:1fr;gap:2rem;padding:2rem;}
+  footer{flex-direction:column;gap:.5rem;padding:1.5rem;}
+}
+</style>
+</head>
+<body>
+
+<div id="cur-ring"></div><div id="cur-dot"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo"><span>~/</span>pranathi</div>
+  <div class="nav-links">
+    <a href="#skills">Skills</a>
+    <a href="#projects">Projects</a>
+    <a href="#experience">Experience</a>
+    <a href="#certs">Certs</a>
+  </div>
+  <a href="mailto:vangapranathi@gmail.com?subject=Hiring%20Inquiry%20%E2%80%94%20Pranathi%20Vanga&body=Hi%20Pranathi%2C%0A%0AI%20came%20across%20your%20portfolio%20and%20I%27d%20love%20to%20discuss%20a%20potential%20opportunity%20with%20you.%0A%0ALooking%20forward%20to%20connecting!" class="nav-cta">hire me →</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero" style="max-width:none;padding-top:8rem;">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-orb"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Available for internships &amp; full-time</div>
+    <h1 class="hero-name">
+      Pranathi<br/>
+      <span class="line2">Vanga</span>
+    </h1>
+    <p class="hero-title">
+      Backend engineer who builds <strong>secure, production-ready systems</strong> — JWT auth, Redis caching, AWS deployments. Final-year B.Tech IT @ MLRIT, Hyderabad.
+    </p>
+    <div class="hero-actions">
+      <a href="#projects" class="btn-primary">View my work ↓</a>
+      <a href="https://github.com/pranathivanga" target="_blank" class="btn-secondary">GitHub ↗</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">3</div>
+        <div class="stat-label">Shipped projects</div>
+      </div>
+      <div>
+        <div class="stat-num">60%</div>
+        <div class="stat-label">DB load cut w/ Redis</div>
+      </div>
+      <div>
+        <div class="stat-num">10+</div>
+        <div class="stat-label">Secret patterns tested</div>
+      </div>
+      <div>
+        <div class="stat-num">CSA</div>
+        <div class="stat-label">ServiceNow certified</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating code card -->
+  <div class="hero-code" id="codeCard" style="display:block;">
+    <div class="code-header">
+      <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+      <span class="code-filename">Pranathi.java</span>
+    </div>
+    <div class="code-body">
+<pre><span class="c-purple">public class</span> <span class="c-blue">Pranathi</span> {
+
+  <span class="c-purple">String</span> role =
+    <span class="c-green">"Backend Engineer"</span>;
+
+  <span class="c-purple">String[]</span> stack = {
+    <span class="c-green">"Spring Boot"</span>,
+    <span class="c-green">"JWT"</span>, <span class="c-green">"Redis"</span>,
+    <span class="c-green">"AWS EC2"</span>
+  };
+
+  <span class="c-muted">// currently building</span>
+  <span class="c-purple">Project</span> active =
+    <span class="c-blue">new</span> <span class="c-amber">DevGuard</span>();
+
+  <span class="c-purple">boolean</span> openToWork
+    = <span class="c-red">true</span>;
+}</pre>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="reveal">
+    <div class="section-label">What I work with</div>
+    <h2 class="section-title">Skills &amp; Stack</h2>
+    <p class="section-sub">Focused on the Java backend ecosystem — built from real projects, not tutorials.</p>
+  </div>
+  <div class="skills-grid reveal">
+    <div class="skill-card">
+      <div class="skill-icon">⚙️</div>
+      <div class="skill-name">Core Java</div>
+      <div class="skill-tags">
+        <span class="tag hot">Java 8+</span>
+        <span class="tag hot">OOP</span>
+        <span class="tag">Collections</span>
+        <span class="tag">Multithreading</span>
+        <span class="tag">Streams</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🚀</div>
+      <div class="skill-name">Spring Ecosystem</div>
+      <div class="skill-tags">
+        <span class="tag hot">Spring Boot</span>
+        <span class="tag hot">Spring Security</span>
+        <span class="tag">Spring MVC</span>
+        <span class="tag">Spring Data JPA</span>
+        <span class="tag">Hibernate</span>
+        <span class="tag">Spring AI</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🔐</div>
+      <div class="skill-name">Security</div>
+      <div class="skill-tags">
+        <span class="tag hot">JWT Auth</span>
+        <span class="tag hot">RBAC</span>
+        <span class="tag">BCrypt</span>
+        <span class="tag">OWASP Top 10</span>
+        <span class="tag">@PreAuthorize</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🗄️</div>
+      <div class="skill-name">Data &amp; Caching</div>
+      <div class="skill-tags">
+        <span class="tag hot">MySQL</span>
+        <span class="tag hot">Redis</span>
+        <span class="tag">@Cacheable</span>
+        <span class="tag">REST API Design</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">☁️</div>
+      <div class="skill-name">Cloud &amp; DevOps</div>
+      <div class="skill-tags">
+        <span class="tag hot">AWS EC2</span>
+        <span class="tag">S3</span>
+        <span class="tag">IAM</span>
+        <span class="tag">Docker</span>
+        <span class="tag">Maven</span>
+        <span class="tag">Git</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🧪</div>
+      <div class="skill-name">Testing</div>
+      <div class="skill-tags">
+        <span class="tag hot">JUnit</span>
+        <span class="tag hot">Mockito</span>
+        <span class="tag">Postman</span>
+        <span class="tag">Unit Testing</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="reveal">
+    <div class="section-label">Things I've built</div>
+    <h2 class="section-title">Projects</h2>
+    <p class="section-sub">Each one was a real problem I wanted to solve — then figured out how.</p>
+  </div>
+  <div class="projects-list reveal">
+
+    <div class="project-item">
+      <div>
+        <div class="project-status status-live"><span class="status-dot"></span> Shipped</div>
+        <div class="project-name">🔒 API Shield</div>
+        <div class="project-desc">
+          Secure authentication middleware built from scratch. Stateless JWT auth, BCrypt hashing, a custom Spring Security filter chain, and full OWASP API Security compliance — not just a library wrapper.
+        </div>
+        <div class="project-meta">
+          <span class="tag hot">Spring Boot</span>
+          <span class="tag hot">Spring Security</span>
+          <span class="tag">JWT</span>
+          <span class="tag">BCrypt</span>
+          <span class="tag">JUnit</span>
+          <span class="tag">RBAC</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/pranathivanga" class="proj-link" target="_blank">GitHub <span class="arrow">↗</span></a>
+        </div>
+      </div>
+      <div class="project-highlight">
+        <div class="highlight-stat">
+          <div class="highlight-num">RBAC</div>
+          <div class="highlight-label">USER + ADMIN roles</div>
+        </div>
+        <div class="highlight-stat">
+          <div class="highlight-num">0</div>
+          <div class="highlight-label">Sensitive data exposed</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-item">
+      <div>
+        <div class="project-status status-live"><span class="status-dot"></span> Shipped · Live on AWS</div>
+        <div class="project-name">🌍 TripWise</div>
+        <div class="project-desc">
+          Smart travel planner backend with trip and itinerary management. Redis caching cut database load significantly, and the whole thing runs live on AWS EC2 with security group rules for controlled API access.
+        </div>
+        <div class="project-meta">
+          <span class="tag hot">Spring Boot</span>
+          <span class="tag hot">Redis</span>
+          <span class="tag hot">AWS EC2</span>
+          <span class="tag">MySQL</span>
+          <span class="tag">Spring Data JPA</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/pranathivanga" class="proj-link" target="_blank">GitHub <span class="arrow">↗</span></a>
+        </div>
+      </div>
+      <div class="project-highlight">
+        <div class="highlight-stat">
+          <div class="highlight-num">~60%</div>
+          <div class="highlight-label">DB load reduction</div>
+        </div>
+        <div class="highlight-stat">
+          <div class="highlight-num">EC2</div>
+          <div class="highlight-label">Live deployment</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-item">
+      <div>
+        <div class="project-status status-wip"><span class="status-dot"></span> In progress</div>
+        <div class="project-name">🕵️ DevGuard</div>
+        <div class="project-desc">
+          REST API that scans source files for hardcoded secrets — API keys, DB passwords, tokens — using a Java Regex detection engine. Rule-based OOP architecture means every new pattern is just a new rule object. Zero false positives on clean files.
+        </div>
+        <div class="project-meta">
+          <span class="tag hot">Spring Boot</span>
+          <span class="tag hot">Regex Engine</span>
+          <span class="tag">MySQL</span>
+          <span class="tag">JWT</span>
+          <span class="tag">JUnit</span>
+          <span class="tag">Mockito</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/pranathivanga" class="proj-link" target="_blank">GitHub <span class="arrow">↗</span></a>
+        </div>
+      </div>
+      <div class="project-highlight">
+        <div class="highlight-stat">
+          <div class="highlight-num">10+</div>
+          <div class="highlight-label">Secret patterns tested</div>
+        </div>
+        <div class="highlight-stat">
+          <div class="highlight-num">HIGH</div>
+          <div class="highlight-label">/ MED / LOW severity</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="reveal">
+    <div class="section-label">Where I've shown up</div>
+    <h2 class="section-title">Experience</h2>
+    <p class="section-sub">Real teams, real problem-solving.</p>
+  </div>
+  <div class="timeline reveal">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">Sept 2025 — Sept 2025</div>
+      <div class="tl-role">Planner — Smart India Hackathon</div>
+      <div class="tl-org">National-level hackathon, Government of India</div>
+      <ul class="tl-points">
+        <li>Led problem analysis and ideation discussions for the team's submission</li>
+        <li>Drove technology stack selection and backend approach planning</li>
+        <li>Assessed implementation feasibility and guided the team's architectural decisions</li>
+        <li>Coordinated brainstorming and review cycles to keep the team aligned</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CERTS -->
+<section id="certs">
+  <div class="reveal">
+    <div class="section-label">Credentials</div>
+    <h2 class="section-title">Certifications</h2>
+    <p class="section-sub">Validated by the orgs that built the platforms I use.</p>
+  </div>
+  <div class="certs-grid reveal">
+    <div class="cert-card">
+      <div class="cert-issuer">ServiceNow</div>
+      <div class="cert-name">Certified System Administrator (CSA)</div>
+      <div class="cert-date">May 2026</div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-issuer">Amazon Web Services</div>
+      <div class="cert-name">AWS Academy Graduate — Cloud Foundations</div>
+      <div class="cert-date">Aug 2025</div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-issuer">Forage</div>
+      <div class="cert-name">AWS Solutions Architecture Job Simulation</div>
+      <div class="cert-date">Aug 2025</div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-issuer">Forage</div>
+      <div class="cert-name">Deloitte Technology Job Simulation</div>
+      <div class="cert-date">Aug 2025</div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-issuer">TCS ION</div>
+      <div class="cert-name">Career Edge</div>
+      <div class="cert-date">Aug 2025</div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-issuer">VJ Hackathon 2025</div>
+      <div class="cert-name">Certificate of Participation — Abstract Review</div>
+      <div class="cert-date">2025</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" style="padding-bottom:2rem;">
+  <div class="contact-inner reveal">
+    <div>
+      <div class="section-label">Let's talk</div>
+      <div class="contact-big">
+        Open to <span>internships</span> &amp; full-time roles
+      </div>
+      <p style="color:var(--muted);margin-top:1rem;font-size:.95rem;">If you're building something where security and clean architecture matter, I'd love to be part of it.</p>
+    </div>
+    <div>
+      <div class="contact-links">
+        <a href="mailto:vangapranathi@gmail.com" class="contact-link">
+          <span class="contact-link-icon">📧</span>
+          <div class="contact-link-text">
+            <div class="contact-link-label">Email</div>
+            <div class="contact-link-val">vangapranathi@gmail.com</div>
+          </div>
+          <span class="contact-link-arrow">→</span>
+        </a>
+        <a href="https://linkedin.com/in/pranathi-vanga" class="contact-link" target="_blank">
+          <span class="contact-link-icon">💼</span>
+          <div class="contact-link-text">
+            <div class="contact-link-label">LinkedIn</div>
+            <div class="contact-link-val">linkedin.com/in/pranathi-vanga</div>
+          </div>
+          <span class="contact-link-arrow">→</span>
+        </a>
+        <a href="https://github.com/pranathivanga" class="contact-link" target="_blank">
+          <span class="contact-link-icon">🐙</span>
+          <div class="contact-link-text">
+            <div class="contact-link-label">GitHub</div>
+            <div class="contact-link-val">github.com/pranathivanga</div>
+          </div>
+          <span class="contact-link-arrow">→</span>
+        </a>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2025 Pranathi Vanga</span>
+  <span>Built with intent. MLRIT, Hyderabad.</span>
+</footer>
+
+<script>
+// cursor
+const curRing = document.getElementById('cur-ring');
+const curDot  = document.getElementById('cur-dot');
+document.addEventListener('mousemove', e => {
+  curRing.style.left = e.clientX + 'px'; curRing.style.top = e.clientY + 'px';
+  curDot.style.left  = e.clientX + 'px'; curDot.style.top  = e.clientY + 'px';
+});
+document.querySelectorAll('a,button,.project-item,.cert-card,.contact-link').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('cur-hover'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('cur-hover'));
+});
+document.addEventListener('mousedown', () => document.body.classList.add('cur-click'));
+document.addEventListener('mouseup',   () => document.body.classList.remove('cur-click'));
+
+// scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+},{threshold:0.1});
+reveals.forEach(r => observer.observe(r));
+
+// code card positioning fix
+function positionCodeCard(){
+  const card = document.getElementById('codeCard');
+  if(window.innerWidth < 900){
+    card.style.display = 'none';
+  } else {
+    card.style.display = 'block';
+  }
+}
+positionCodeCard();
+window.addEventListener('resize', positionCodeCard);
+</script>
+</body>
+</html>
